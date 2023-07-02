@@ -1,0 +1,72 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    "version": "2.0.0",
+    "options": {
+        "cwd": "${workspaceFolder}/build"
+    },
+    "tasks": [
+        {
+            "label": "cmake -GMinGW Makefiles",
+            "type": "shell",
+            "command": [
+                "cmake"
+            ],
+            "args": [
+                "-GMinGW Makefiles",
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_CXX_FLAGS_DEBUG=-O -g",
+                ".."
+            ]
+        },
+        {
+            "label": "mingw32-make",
+            "type": "shell",
+            "command": [
+                "mingw32-make"
+            ], //要把mingw32-make添加到环境path中
+            "args": [
+                "-j14"
+            ]
+        },
+        {
+            "label": "cmake mingw-make(gcc)",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "cmake -GMinGW Makefiles",
+                "mingw32-make"
+            ]
+        },
+        {
+            "label": "cmake -GVisual Studio 17 2022",
+            "type": "shell",
+            "command": [
+                "cmake"
+            ],
+            "args": [
+                "-GVisual Studio 17 2022",
+                "-DCMAKE_BUILD_TYPE=Debug",
+                ".."
+            ]
+        },
+        {
+            "label": "msbuild",
+            "type": "shell",
+            "command": [
+                "cmake"
+            ],
+            "args": [
+                "--build",
+                ".",
+                "-j14"
+            ]
+        },
+        {
+            "label": "cmake msbuild(cl)",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "cmake -GVisual Studio 17 2022",
+                "msbuild"
+            ]
+        }
+    ]
+}
